@@ -1,11 +1,15 @@
 package ru.yandex.practicum;
 
+import ru.yandex.practicum.exceptions.SystemException;
+
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+
+import static ru.yandex.practicum.WordleGame.WORD_LENGTH;
 
 
 public class WordleDictionaryLoader {
@@ -29,7 +33,7 @@ public class WordleDictionaryLoader {
         try (BufferedReader br = new BufferedReader(new FileReader(wordFile.toFile(), StandardCharsets.UTF_8))) {
             while (br.ready()) {
                 String line = br.readLine();
-                if (line.length() == 5) {
+                if (line.length() == WORD_LENGTH) {
                     words.add(line.toLowerCase().replace("ё", "е").trim());
                 }
             }

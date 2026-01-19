@@ -3,6 +3,8 @@ package ru.yandex.practicum;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import ru.yandex.practicum.exceptions.InvalidWordFormatException;
+import ru.yandex.practicum.exceptions.WordNotFoundInDictionaryException;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -59,6 +61,9 @@ class WordleTest {
         assertThrows(WordNotFoundInDictionaryException.class, () -> {
             dict.wordInDictionary("бедро");
         });
+        assertThrows(NullPointerException.class, () -> {
+            dict.wordInDictionary(null);
+        });
     }
 
     @Test
@@ -73,9 +78,6 @@ class WordleTest {
     @Test
     public void testInvalidWordFormat() {
         assertThrows(InvalidWordFormatException.class, () -> {
-            dict.validateWordFormat(null);
-        });
-        assertThrows(InvalidWordFormatException.class, () -> {
             dict.validateWordFormat("верность");
         });
         assertThrows(InvalidWordFormatException.class, () -> {
@@ -84,6 +86,9 @@ class WordleTest {
         assertThrows(InvalidWordFormatException.class, () -> {
             dict.validateWordFormat("каша1");
         });
+        assertThrows(NullPointerException.class, () -> {
+            dict.validateWordFormat(null);
+        });
     }
 
     @Test
@@ -91,6 +96,9 @@ class WordleTest {
         assertEquals("весны", dict.normalizeWord("Вёсны"));
         assertEquals("пятка", dict.normalizeWord("пЯтКа"));
         assertEquals("мираж", dict.normalizeWord("  МИРАЖ    "));
+        assertThrows(NullPointerException.class, () -> {
+            dict.normalizeWord(null);
+        });
     }
 
     @Test

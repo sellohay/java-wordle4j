@@ -1,9 +1,14 @@
 package ru.yandex.practicum;
 
+import ru.yandex.practicum.exceptions.InvalidWordFormatException;
+import ru.yandex.practicum.exceptions.WordNotFoundInDictionaryException;
+
 import java.io.PrintWriter;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
+
+import static ru.yandex.practicum.WordleGame.WORD_LENGTH;
 
 
 public class WordleDictionary {
@@ -22,14 +27,20 @@ public class WordleDictionary {
         return words.get(rand.nextInt(words.size()));
     }
 
-    public void wordInDictionary(String word) throws WordNotFoundInDictionaryException {
+    public void wordInDictionary(String word) throws WordNotFoundInDictionaryException, NullPointerException {
+        if (word == null) {
+            throw new NullPointerException("Слово не было передано");
+        }
         if (!words.contains(word)) {
             throw new WordNotFoundInDictionaryException(word);
         }
     }
 
-    public void validateWordFormat(String word) throws InvalidWordFormatException {
-        if (word == null || word.length() != 5) {
+    public void validateWordFormat(String word) throws InvalidWordFormatException, NullPointerException {
+        if (word == null) {
+            throw new NullPointerException("Слово не было передано");
+        }
+        if (word.length() != WORD_LENGTH) {
             throw new InvalidWordFormatException(word);
         }
         for (char c : word.toCharArray()) {
@@ -39,7 +50,10 @@ public class WordleDictionary {
         }
     }
 
-    public String normalizeWord(String word) {
+    public String normalizeWord(String word) throws NullPointerException {
+        if (word == null) {
+            throw new NullPointerException("Слово не было передано");
+        }
         return word.toLowerCase().replace("ё", "е").trim();
     }
 

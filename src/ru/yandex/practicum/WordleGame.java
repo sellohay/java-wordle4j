@@ -14,7 +14,8 @@ public class WordleGame {
     private final WordleDictionary dictionary;
     private final List<String> previousAttempts;
     private final Map<Character, Integer> letters;
-    private static final int MAX_ATTEMPTS = 6;
+    public static final int MAX_ATTEMPTS = 6;
+    public static final int WORD_LENGTH = 5;
 
     public WordleGame(WordleDictionary dictionary, PrintWriter logger) {
         this.logger = logger;
@@ -46,17 +47,7 @@ public class WordleGame {
         for (int i = 0; i < word.length(); i++) {
             if (word.charAt(i) == answer.charAt(i)) {
                 res.append("+");
-                letters.putIfAbsent(word.charAt(i), 0);
-                boolean needToCount = true; //проверка, была ли эта буква отгадана ранее
-                for (String attempt : previousAttempts) {
-                    if (attempt.charAt(i) == word.charAt(i)) {
-                        needToCount = false;
-                        break;
-                    }
-                }
-                if (needToCount) {
-                    letters.put(word.charAt(i), letters.get(word.charAt(i)) + 1);
-                }
+                updateLettersGuessed(word, i);
             } else if (answer.contains(word.substring(i, i + 1))) {
                 res.append("^");
             } else {
@@ -67,6 +58,20 @@ public class WordleGame {
         previousAttempts.add(word);
         logger.println("Полученная подсказка для слова: " + res);
         return res.toString();
+    }
+
+    private void updateLettersGuessed(String word, int index) {
+        letters.putIfAbsent(word.charAt(index), 0);
+        boolean needToCount = true; //проверка, была ли эта буква отгадана ранее
+        for (String attempt : previousAttempts) {
+            if (attempt.charAt(index) == word.charAt(index)) {
+                needToCount = false;
+                break;
+            }
+        }
+        if (needToCount) {
+            letters.put(word.charAt(index), letters.get(word.charAt(index)) + 1);
+        }
     }
 
     public void makeMove() {
@@ -89,15 +94,7 @@ public class WordleGame {
             if (previousAttempts.contains(word)) {
                 continue;
             }
-            boolean isSuitable = true;
-            for (Character letter: letters.keySet()) {
-                if ((letters.get(letter) == 0 && word.contains(letter.toString()))
-                        || letters.get(letter) > countMatch(word, letter)) {
-                    isSuitable = false;
-                    break;
-                }
-            }
-            if (isSuitable) {
+            if (checkSuitability(word)) {
                 setWords.add(word);
             }
         }
@@ -115,10 +112,20 @@ public class WordleGame {
         return dictionary.getRandomWordFromSet(setWords);
     }
 
+    private boolean checkSuitability(String word) {
+        for (Character letter: letters.keySet()) {
+            if ((letters.get(letter) == 0 && word.contains(letter.toString()))
+                    || letters.get(letter) > countMatch(word, letter)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     //"маска" для подходящих слов
     private String getMask() {
         StringBuilder mask = new StringBuilder();
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < WORD_LENGTH; i++) {
             boolean isGuessed = false;
             for (String attempt : previousAttempts) {
                 if (attempt.charAt(i) == answer.charAt(i)) {
@@ -159,4 +166,5 @@ public class WordleGame {
     public void setAnswer(String answer) {
         this.answer = answer;
     }
+
 }
