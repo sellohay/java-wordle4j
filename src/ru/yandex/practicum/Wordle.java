@@ -15,8 +15,7 @@ public class Wordle {
 
 
     public static void main(String[] args) {
-        try (PrintWriter logger = new PrintWriter(Paths.get(LOG_FILE).toFile()); Scanner sc = new Scanner(System.in))
-        {
+        try (PrintWriter logger = new PrintWriter(Paths.get(LOG_FILE).toFile()); Scanner sc = new Scanner(System.in)) {
             logger.println("Старт игры Wordle");
 
             //загрузка словаря

@@ -23,10 +23,10 @@ public class WordleDictionaryLoader {
 
         if (!Files.exists(wordFile)) {
             logger.println("ОШИБКА: файл словаря не найден: " + wordFile);
-            throw new FileNotFoundException("ОШИБКА: файл словаря не найден: " + wordFile.toString());
+            throw new FileNotFoundException("ОШИБКА: файл словаря не найден: " + wordFile);
         }
 
-        try(BufferedReader br = new BufferedReader(new FileReader(wordFile.toFile(), StandardCharsets.UTF_8))) {
+        try (BufferedReader br = new BufferedReader(new FileReader(wordFile.toFile(), StandardCharsets.UTF_8))) {
             while (br.ready()) {
                 String line = br.readLine();
                 if (line.length() == 5) {
